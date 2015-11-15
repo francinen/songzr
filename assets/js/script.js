@@ -8,19 +8,7 @@ $(function(){
 		}, 300);
 	});
 
-	$('#submit-btn').on('click', function(e){
-		e.preventDefault();
-		setTimeout(function() {
-			$('.subject').fadeOut();
-			$('.play').fadeIn();
-			loadingAnimation();
-		}, 200);
-	});
-
-	$('.ready').on('click', function(e) {
-		e.preventDefault();
-	});
-
+	initEvents();
 });
 
 function loadingAnimation() {
@@ -28,7 +16,7 @@ function loadingAnimation() {
 	$(ellipsis[0]).addClass('show');
 
 	var next = 1;
-	setInterval(function() {
+	loading = setInterval(function() {
 		$(ellipsis[next]).addClass('show');	
 		if (next > 0 && next < ellipsis.length) {
 			next++;
@@ -43,6 +31,41 @@ function loadingAnimation() {
 };
 
 function partyTime() {
+	clearInterval(loading);
 	$('.loading').hide();
-	$('.ready').fadeIn();
+	$('.repeat, .ready').fadeIn();
 };
+
+function resetApp() {
+	$('.repeat, .ready, .play').fadeOut();
+	
+	setTimeout(function() {
+		$('.loading').show();
+	}, 400);
+
+	$('.moods').fadeIn();
+
+};
+
+function initEvents() {
+	$('button').on('click', function(e) {
+		e.preventDefault();
+	});
+
+	$('#submit-btn').on('click', function(e){
+		e.preventDefault();
+		setTimeout(function() {
+			$('.subject').fadeOut();
+			$('.play').fadeIn();
+			loadingAnimation();
+		}, 200);
+	});
+
+	$('.ready').on('click', function() {
+		$(this).toggleClass('stop-btn').find('i').toggleClass('fa-play-circle').toggleClass('fa-stop');
+	});
+
+	$('.repeat').on('click', function() {
+		resetApp();
+	});
+}
